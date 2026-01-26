@@ -294,6 +294,8 @@ pub enum Action {
         #[cfg_attr(feature = "clap", arg(long))]
         id: Option<u64>,
     },
+    /// Close all windows on the current workspace.
+    CloseWorkspace,
     /// Toggle fullscreen on a window.
     #[cfg_attr(
         feature = "clap",

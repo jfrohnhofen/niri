@@ -384,7 +384,7 @@ impl Thumbnail {
                 if let Some(shader) = clip_shader.clone() {
                     if ClippedSurfaceRenderElement::will_clip(&elem, s, geo, radius) {
                         let elem =
-                            ClippedSurfaceRenderElement::new(elem, s, geo, shader.clone(), radius);
+                            ClippedSurfaceRenderElement::new(elem, s, geo, shader.clone(), radius, 1.0);
                         return ThumbnailRenderElement::ClippedSurface(elem);
                     }
                 }
@@ -1902,6 +1902,7 @@ fn make_dynamic_opened_binds(config: &Config) -> Vec<Bind> {
             Action::FocusColumnFirst => Action::MruFirst,
             Action::FocusColumnLast => Action::MruLast,
             Action::CloseWindow => Action::MruCloseCurrentWindow,
+            Action::CloseWorkspace => Action::CloseWorkspace,
             x @ Action::Screenshot(_, _) => x.clone(),
             _ => continue,
         };

@@ -24,6 +24,7 @@ pub struct Layout {
     pub gaps: f64,
     pub struts: Struts,
     pub background_color: Color,
+    pub inactive_window_dim: f64,
 }
 
 impl Default for Layout {
@@ -46,6 +47,7 @@ impl Default for Layout {
             default_column_display: ColumnDisplay::Normal,
             gaps: 16.,
             struts: Struts::default(),
+            inactive_window_dim: 0.2,
             preset_window_heights: vec![
                 PresetSize::Proportion(1. / 3.),
                 PresetSize::Proportion(0.5),
@@ -68,6 +70,7 @@ impl MergeWith<LayoutPart> for Layout {
             always_center_single_column,
             empty_workspace_above_first,
             gaps,
+            inactive_window_dim,
         );
 
         merge_clone!(
@@ -126,6 +129,8 @@ pub struct LayoutPart {
     pub struts: Option<Struts>,
     #[knuffel(child)]
     pub background_color: Option<Color>,
+    #[knuffel(child, unwrap(argument))]
+    pub inactive_window_dim: Option<FloatOrInt<0, 1>>,
 }
 
 #[derive(knuffel::Decode, Debug, Clone, Copy, PartialEq)]

@@ -1176,12 +1176,19 @@ impl<W: LayoutElement> Tile<W> {
                     if clip_to_geometry {
                         if let Some(shader) = clip_shader.clone() {
                             if ClippedSurfaceRenderElement::will_clip(&elem, scale, geo, radius) {
+                                let dim = if !focus_ring {
+                                    1.0 - self.options.layout.inactive_window_dim
+                                } else {
+                                    1.0
+                                };
+
                                 return ClippedSurfaceRenderElement::new(
                                     elem,
                                     scale,
                                     geo,
                                     shader.clone(),
                                     radius,
+                                    dim as f32,
                                 )
                                 .into();
                             }

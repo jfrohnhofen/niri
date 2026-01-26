@@ -97,6 +97,7 @@ impl Shaders {
                     UniformName::new("geo_size", UniformType::_2f),
                     UniformName::new("corner_radius", UniformType::_4f),
                     UniformName::new("input_to_geo", UniformType::Matrix3x3),
+                    UniformName::new("dim", UniformType::_1f),
                 ],
             )
             .map_err(|err| {

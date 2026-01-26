@@ -801,12 +801,27 @@ impl State {
             Action::CloseWindow => {
                 if let Some(mapped) = self.niri.layout.focus() {
                     mapped.toplevel().send_close();
+                    if let Some(workspace) = self.niri.layout.active_workspace() {
+                        if workspace.windows().count() == 1 {
+                            self.do_action(Action::FocusWorkspacePrevious, allow_when_locked);
+                        }
+                    }
                 }
             }
             Action::CloseWindowById(id) => {
                 let window = self.niri.layout.windows().find(|(_, m)| m.id().get() == id);
                 if let Some((_, mapped)) = window {
                     mapped.toplevel().send_close();
+                }
+            }
+            Action::CloseWorkspace => {
+                if let Some(workspace) = self.niri.layout.active_workspace() {
+                    let toplevels: Vec<_> =
+                        workspace.windows().map(|m| m.toplevel().clone()).collect();
+                    for toplevel in toplevels {
+                        toplevel.send_close();
+                    }
+                    self.do_action(Action::FocusWorkspacePrevious, allow_when_locked);
                 }
             }
             Action::FullscreenWindow => {
@@ -3744,14 +3759,8 @@ impl State {
             return;
         }
 
-        if event.fingers() == 3 {
+        if event.fingers() == 4 {
             self.niri.gesture_swipe_3f_cumulative = Some((0., 0.));
-
-            // We handled this event.
-            return;
-        } else if event.fingers() == 4 {
-            self.niri.layout.overview_gesture_begin();
-            self.niri.queue_redraw_all();
 
             // We handled this event.
             return;
@@ -3795,8 +3804,9 @@ impl State {
         let device = event.device();
         if let Some(device) = (&device as &dyn Any).downcast_ref::<input::Device>() {
             if device.config_scroll_natural_scroll_enabled() {
-                delta_x = -delta_x;
                 delta_y = -delta_y;
+            } else {
+                delta_x = -delta_x;
             }
         }
 
