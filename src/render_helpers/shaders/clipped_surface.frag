@@ -14,6 +14,7 @@ uniform sampler2D tex;
 #endif
 
 uniform float alpha;
+uniform float dim;
 varying vec2 v_coords;
 
 #if defined(DEBUG_FLAGS)
@@ -70,6 +71,7 @@ void main() {
 
     // Apply final alpha and tint.
     color = color * alpha;
+    color.rgb = color.rgb * dim;
 
 #if defined(DEBUG_FLAGS)
     if (tint == 1.0)

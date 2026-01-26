@@ -1159,6 +1159,12 @@ impl<W: LayoutElement> Tile<W> {
 
             let clip_shader = ClippedSurfaceRenderElement::shader(renderer).cloned();
 
+            let dim = if !focus_ring {
+                1.0 - self.options.layout.inactive_window_dim
+            } else {
+                1.0
+            };
+
             if clip_to_geometry && clip_shader.is_some() {
                 let damage = self.rounded_corner_damage.element();
                 rounded_corner_damage = Some(damage.with_location(window_render_loc).into());
@@ -1176,6 +1182,7 @@ impl<W: LayoutElement> Tile<W> {
                                     geo,
                                     shader.clone(),
                                     radius,
+                                    dim as f32,
                                 )
                                 .into();
                             }

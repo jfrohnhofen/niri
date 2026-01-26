@@ -35,6 +35,7 @@ impl<R: NiriRenderer> ClippedSurfaceRenderElement<R> {
         geometry: Rectangle<f64, Logical>,
         program: GlesTexProgram,
         corner_radius: CornerRadius,
+        dim: f32,
     ) -> Self {
         let elem_geo = elem.geometry(scale);
 
@@ -75,6 +76,7 @@ impl<R: NiriRenderer> ClippedSurfaceRenderElement<R> {
             Uniform::new("geo_size", (geometry.size.w as f32, geometry.size.h as f32)),
             Uniform::new("corner_radius", <[f32; 4]>::from(corner_radius)),
             mat3_uniform("input_to_geo", input_to_geo),
+            Uniform::new("dim", dim),
         ];
 
         Self {
